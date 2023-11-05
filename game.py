@@ -11,8 +11,10 @@ GREEN = (113, 212, 68)
 DARKGREEN = (52, 97, 31)
 # settings
 BLOCK_SIZE = 20
+REWARD = 10
+PENALTY = -10
 SMALLER_BLOCK_SIZE = 18
-FRAMERATE = 20
+FRAMERATE = 40
 ITERATION_LIMIT = 100
 
 # initialise pygame
@@ -89,15 +91,17 @@ class SnakeGameAI:
         # check game over and reward
         reward = 0
         game_over = False
-        if self.collide() or self.frame_iteration > ITERATION_LIMIT * len(self.snake):
+        if self.is_collision() or self.frame_iteration > ITERATION_LIMIT * len(
+            self.snake
+        ):
             game_over = True
-            reward = -10
+            reward = PENALTY
             pygame.quit()
             return reward, game_over, self.score
         # update food
         if self.head.x == self.food.x and self.head.y == self.food.y:
             self.score += 1
-            reward = 10
+            reward = REWARD
             self._render_food()
         else:
             self.snake.pop()
@@ -145,9 +149,9 @@ class SnakeGameAI:
         if np.array_equal(action, [1, 0, 0]):
             new_index = index  # no change
         elif np.array_equal(action, [0, 1, 0]):
-            new_index = (index + 1) % 4  # right turn
+            new_index = (index + 1) % len(self.clock_wise)  # right turn
         else:
-            new_index = (index - 1) % 4  # left turn
+            new_index = (index - 1) % len(self.clock_wise)  # left turn
         new_direction = self.clock_wise[new_index]
         self.direction = new_direction
 
@@ -162,7 +166,7 @@ class SnakeGameAI:
             y += BLOCK_SIZE
         self.head = Coordinate(x, y)
 
-    def collide(self, coordinate=None):
+    def is_collision(self, coordinate=None):
         if coordinate is None:
             coordinate = self.head
         # hits walls
