@@ -89,7 +89,7 @@ class SnakeGameAI:
         # check game over and reward
         reward = 0
         game_over = False
-        if self._collide() or self.frame_iteration > ITERATION_LIMIT * len(self.snake):
+        if self.collide() or self.frame_iteration > ITERATION_LIMIT * len(self.snake):
             game_over = True
             reward = -10
             pygame.quit()
@@ -162,7 +162,7 @@ class SnakeGameAI:
             y += BLOCK_SIZE
         self.head = Coordinate(x, y)
 
-    def _collide(self, coordinate=None):
+    def collide(self, coordinate=None):
         if coordinate is None:
             coordinate = self.head
         # hits walls
