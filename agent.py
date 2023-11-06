@@ -90,7 +90,7 @@ class Agent:
         # as number of games increases the epsilon decreases thus exploration decreases
         self.epsilon = EXPLORATION_NUMBER - self.games
         action = [0, 0, 0]
-        if self.epsilon < random.randint(0, 2 * EXPLORATION_NUMBER):
+        if self.epsilon > random.randint(0, 2 * EXPLORATION_NUMBER):
             move = random.randint(0, 2)
             action[move] = 1
         else:

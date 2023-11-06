@@ -96,7 +96,6 @@ class SnakeGameAI:
         ):
             game_over = True
             reward = PENALTY
-            pygame.quit()
             return reward, game_over, self.score
         # update food
         if self.head.x == self.food.x and self.head.y == self.food.y:
@@ -146,12 +145,12 @@ class SnakeGameAI:
     def _move_head(self, action):
         # action in form of [straight, right, left]
         index = self.clock_wise.index(self.direction)
-        if np.array_equal(action, [1, 0, 0]):
-            new_index = index  # no change
-        elif np.array_equal(action, [0, 1, 0]):
+        if np.array_equal(action, [0, 1, 0]):
             new_index = (index + 1) % len(self.clock_wise)  # right turn
-        else:
+        elif np.array_equal(action, [0, 0, 1]):
             new_index = (index - 1) % len(self.clock_wise)  # left turn
+        else:  # [1, 0, 0]
+            new_index = index  # no change
         new_direction = self.clock_wise[new_index]
         self.direction = new_direction
 
